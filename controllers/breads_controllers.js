@@ -77,6 +77,8 @@ breads.post('/', (req, res) => {
     }
     Bread.create(req.body)
     res.redirect('/breads')
+    
+
   })
   
   //DELETE
