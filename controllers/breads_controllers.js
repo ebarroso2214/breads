@@ -30,6 +30,8 @@ breads.get('/new' , (req, res)=> {
 breads.get('/:id', (req, res)=>{
   Bread.findById(req.params.id)
     .then(foundBread => {
+      const bakedBy = foundBread.getBakedBy()
+      console.log(bakedBy)
       res.render('show', {
         bread: foundBread,
       })
@@ -77,7 +79,7 @@ breads.post('/', (req, res) => {
     }
     Bread.create(req.body)
     res.redirect('/breads')
-    
+
 
   })
   
