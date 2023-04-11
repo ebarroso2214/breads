@@ -10,8 +10,8 @@ const Baker = require('../models/baker.js')
 //INDEX
 breads.get('/', async (req,res) => {
  const foundBakers = await Baker.find().lean()
- const foundBreads = await Bread.find().limit(3).lean()
- console.log(foundBreads)
+ const foundBreads = await Bread.find().lean()
+ 
   res.render('index', {
     breads: foundBreads,
     bakers: foundBakers,
@@ -42,7 +42,6 @@ breads.get('/:id', (req, res)=>{
     .populate('baker')
     .then(foundBread => {
       const bakedBy = foundBread.getBakedBy()
-      console.log(bakedBy)
       res.render('show', {
         bread: foundBread,
       })
@@ -77,14 +76,13 @@ breads.put('/:id' , (req,res) => {
 
   Bread.findByIdAndUpdate(req.params.id, req.body, {new:true})
   .then(updatedBread => {
-    console.log(updatedBread)
     res.redirect(`/breads/${req.params.id}`)
   })
   
 })
 
 // CREATE
-breads.post('/', (req, res) => {
+breads.post('/', async (req, res) => {
     if (!req.body.image) {
       req.body.image = undefined
     }
@@ -93,8 +91,9 @@ breads.post('/', (req, res) => {
     } else {
       req.body.hasGluten = false
     }
-    Bread.create(req.body)
+    try { await Bread.create(req.body) } catch(error) {console.log("there was an error: Duplicate bread found")}
     res.redirect('/breads')
+
 
 
   })

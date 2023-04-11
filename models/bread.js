@@ -4,7 +4,7 @@ const mongoose = require('mongoose')
 const { Schema } = mongoose 
 
 const breadSchema = new Schema ({
-  name: {type: String, required: true},
+  name: {type: String, required: true, unique: true},
   hasGluten: {Boolean}, 
   image: {type: String, default: 'http://placehold.it/500x500.png'},
   baker: {
@@ -15,7 +15,7 @@ const breadSchema = new Schema ({
 
 //helper methods 
 breadSchema.methods.getBakedBy = function (){
-  return `${this.name} was baked with love by ${this.baker.name || "nobody"}, who has been with us since ${this.baker.startDate.getFullYear() || 'never'}`
+  return `${this.name} was baked with love by ${this?.baker?.name || "nobody"}, who has been with us since ${this?.baker?.startDate?.getFullYear() || 'never'}`
 }
 
 
